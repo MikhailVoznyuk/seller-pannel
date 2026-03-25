@@ -1,10 +1,21 @@
-import Fastify from 'fastify';
+import Fastify, { FastifyRequest } from 'fastify';
 
 import items from 'data/items.json' with { type: 'json' };
 import { Item } from 'src/types.ts';
-import { ItemsGetInQuerySchema, ItemUpdateInSchema } from 'src/validation.ts';
+import {
+  AiChatInSchema,
+  AiDescriptionInSchema,
+  AiPriceInSchema,
+  ItemsGetInQuerySchema,
+  ItemUpdateInSchema,
+} from 'src/validation.ts';
 import { treeifyError, ZodError } from 'zod';
 import { doesItemNeedRevision } from './src/utils.ts';
+import {
+  generateChatReply,
+  generateDescriptionSuggestion,
+  generatePriceSuggestion,
+} from './src/ai/service.ts';
 
 const ITEMS = items as Item[];
 
@@ -15,14 +26,19 @@ const fastify = Fastify({
 await fastify.register((await import('@fastify/middie')).default);
 
 // Искуственная задержка ответов, чтобы можно было протестировать состояния загрузки
-fastify.use((_, __, next) =>
-  new Promise(res => setTimeout(res, 300 + Math.random() * 700)).then(next),
-);
+fastify.use((request, _, next) => {
+  if (request.url?.startsWith('/ai/')) {
+    next();
+    return;
+  }
+
+  new Promise(res => setTimeout(res, 300 + Math.random() * 700)).then(next);
+});
 
 // Настройка CORS
 fastify.use((request, reply, next) => {
   reply.setHeader('Access-Control-Allow-Origin', '*');
-  reply.setHeader('Access-Control-Allow-Methods', 'GET,PUT,OPTIONS');
+  reply.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,OPTIONS');
   reply.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (request.method === 'OPTIONS') {
@@ -33,6 +49,26 @@ fastify.use((request, reply, next) => {
 
   next();
 });
+
+
+function createRequestSignal(request: FastifyRequest) {
+  const controller = new AbortController();
+
+  const onClose = () => {
+    if (request.raw.aborted) {
+      controller.abort();
+    }
+  };
+
+  request.raw.once('close', onClose);
+
+  return {
+    signal: controller.signal,
+    cleanup: () => {
+      request.raw.off('close', onClose);
+    },
+  };
+}
 
 interface ItemGetRequest extends Fastify.RequestGenericInterface {
   Params: {
@@ -171,6 +207,96 @@ fastify.put<ItemUpdateRequest>('/items/:id', (request, reply) => {
     }
 
     throw error;
+  }
+});
+
+
+interface AiDescriptionRequest extends Fastify.RequestGenericInterface {
+  Body: {
+    item: unknown;
+  };
+}
+
+fastify.post<AiDescriptionRequest>('/ai/description', async (request, reply) => {
+  const { signal, cleanup } = createRequestSignal(request);
+
+  try {
+    const { item } = AiDescriptionInSchema.parse(request.body);
+    return await generateDescriptionSuggestion(item, signal);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      reply.status(400).send({ success: false, error: treeifyError(error) });
+      return;
+    }
+
+    if ((error as Error).name === 'AbortError') {
+      reply.status(499).send({ success: false, error: 'Request aborted' });
+      return;
+    }
+
+    reply.status(502).send({ success: false, error: (error as Error).message || 'AI request failed' });
+  } finally {
+    cleanup();
+  }
+});
+
+interface AiPriceRequest extends Fastify.RequestGenericInterface {
+  Body: {
+    item: unknown;
+  };
+}
+
+fastify.post<AiPriceRequest>('/ai/price', async (request, reply) => {
+  const { signal, cleanup } = createRequestSignal(request);
+
+  try {
+    const { item } = AiPriceInSchema.parse(request.body);
+    return await generatePriceSuggestion(item, signal);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      reply.status(400).send({ success: false, error: treeifyError(error) });
+      return;
+    }
+
+    if ((error as Error).name === 'AbortError') {
+      reply.status(499).send({ success: false, error: 'Request aborted' });
+      return;
+    }
+
+    reply.status(502).send({ success: false, error: (error as Error).message || 'AI request failed' });
+  } finally {
+    cleanup();
+  }
+});
+
+interface AiChatRequest extends Fastify.RequestGenericInterface {
+  Body: {
+    item: unknown;
+    question: string;
+    messages?: unknown[];
+  };
+}
+
+fastify.post<AiChatRequest>('/ai/chat', async (request, reply) => {
+  const { signal, cleanup } = createRequestSignal(request);
+
+  try {
+    const { item, question, messages } = AiChatInSchema.parse(request.body);
+    return await generateChatReply(item, messages, question, signal);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      reply.status(400).send({ success: false, error: treeifyError(error) });
+      return;
+    }
+
+    if ((error as Error).name === 'AbortError') {
+      reply.status(499).send({ success: false, error: 'Request aborted' });
+      return;
+    }
+
+    reply.status(502).send({ success: false, error: (error as Error).message || 'AI request failed' });
+  } finally {
+    cleanup();
   }
 });
 

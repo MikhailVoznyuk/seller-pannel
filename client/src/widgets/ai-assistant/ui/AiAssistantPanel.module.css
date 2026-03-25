@@ -1,0 +1,102 @@
+.panel {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.section {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.chat {
+  display: grid;
+  gap: 10px;
+  max-height: 360px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.message {
+  max-width: 90%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  white-space: pre-wrap;
+}
+
+.user {
+  justify-self: end;
+  background: var(--primary);
+  color: #fff;
+}
+
+.assistant {
+  justify-self: start;
+  background: var(--surface-muted);
+}
+
+.ask {
+  display: grid;
+  gap: 10px;
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 12px;
+  outline: none;
+}
+
+.textarea:focus {
+  border-color: var(--primary);
+}
+
+.compare {
+  display: grid;
+  gap: 14px;
+}
+
+.compareBlock {
+  display: grid;
+  gap: 8px;
+}
+
+.compareTitle {
+  margin: 0;
+  font-size: 15px;
+}
+
+.compareText {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.added {
+  background: rgba(82, 196, 26, 0.14);
+}
+
+.removed {
+  background: rgba(255, 77, 79, 0.14);
+  text-decoration: line-through;
+}

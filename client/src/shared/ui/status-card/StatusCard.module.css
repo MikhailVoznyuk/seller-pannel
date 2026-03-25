@@ -1,20 +1,27 @@
 .card {
-  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
   height: fit-content;
   border-radius: 16px;
   border: 1px solid var(--border);
   background: var(--surface);
   padding: 16px;
+  box-shadow: var(--shadow);
 }
 
+.header {
+  display: flex;
+  gap: 10px;
+}
 .title {
   margin: 0;
   font-size: 16px;
 }
 
 .content {
-  margin-top: 8px;
-  color: var(--text-soft);
+  color: var(--text);
 }
 
 .info {

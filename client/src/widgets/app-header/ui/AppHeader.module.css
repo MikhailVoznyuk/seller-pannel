@@ -1,17 +1,15 @@
 .header {
   position: sticky;
-  top: 0;
+  width: fit-content;
+  height: fit-content;
+  top: 24px;
+  left: 100%;
   z-index: 10;
-  padding: 16px 24px 0;
 }
 
 .inner {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 12px 0;
+  width: fit-content;
+  height: fit-content;
 }
 
 .logo {

@@ -1,7 +1,6 @@
 .card {
+  position: relative;
   display: grid;
-  gap: 14px;
-  padding: 16px;
   border-radius: 18px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -9,6 +8,8 @@
   transition:
     transform 0.2s ease,
     border-color 0.2s ease;
+
+  overflow: hidden;
 }
 
 .card:hover {
@@ -26,7 +27,6 @@
   align-items: center;
   justify-content: center;
   min-height: 128px;
-  border-radius: 14px;
   background: var(--surface-muted);
   overflow: hidden;
 }
@@ -37,40 +37,62 @@
 }
 
 .content {
+  position: relative;
   display: grid;
   gap: 10px;
+  padding: 0 16px 16px 16px;
+
 }
 
 .metaRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  position: relative;
+  left: 14px;
+  width: fit-content;
+  height: fit-content;
+  transform: translateY(calc(-50% - 1px));
+
 }
 
 .category {
   font-size: 13px;
   color: var(--text-soft);
+  background: var(--surface-muted);
+  border: 1px solid var(--text-soft);
+  padding: 4px 12px;
+  border-radius: 8px;
+
 }
 
 .badge {
+  width: fit-content;
   display: inline-flex;
   align-items: center;
   padding: 4px 8px;
-  border-radius: 999px;
+  gap: 8px;
+  border-radius: 8px;
   background: var(--warning-soft);
-  color: #a86400;
+  color: #FFA940;
   font-size: 12px;
+}
+
+.circle {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #FFA940;
 }
 
 .title {
   margin: 0;
   font-size: 18px;
+  font-weight: 400;
 }
 
 .price {
   margin: 0;
   font-size: 18px;
   font-weight: 700;
+  color: var(--text-soft);
 }
 
 .date {

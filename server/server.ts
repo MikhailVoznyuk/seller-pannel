@@ -70,6 +70,8 @@ function createRequestSignal(request: FastifyRequest) {
   };
 }
 
+fastify.get('/health', () => ({ success: true }));
+
 interface ItemGetRequest extends Fastify.RequestGenericInterface {
   Params: {
     id: string;
@@ -301,8 +303,9 @@ fastify.post<AiChatRequest>('/ai/chat', async (request, reply) => {
 });
 
 const port = Number(process.env.PORT ?? process.env.port ?? 8080);
+const host = process.env.HOST || '0.0.0.0';
 
-fastify.listen({ port }, function (err, _address) {
+fastify.listen({ port, host }, function (err, _address) {
   if (err) {
     fastify.log.error(err);
     process.exit(1);

@@ -64,6 +64,39 @@ export const ItemsGetInQuerySchema = z.object({
   sortDirection: z.enum<SortDirection[]>(['asc', 'desc']).optional(),
 });
 
+
+const LooseDraftPriceSchema = z.union([z.number(), z.literal('')]).optional();
+
+export const AiDraftItemSchema = z.object({
+  category: CategorySchema,
+  title: z.string().trim().default(''),
+  description: z.string().optional().default(''),
+  price: LooseDraftPriceSchema,
+  params: z.record(z.string(), z.unknown()).optional().default({}),
+});
+
+export const AiDescriptionInSchema = z.object({
+  item: AiDraftItemSchema,
+});
+
+export const AiPriceInSchema = z.object({
+  item: AiDraftItemSchema,
+});
+
+export const AiChatInSchema = z.object({
+  item: AiDraftItemSchema,
+  question: z.string().trim().min(1),
+  messages: z
+    .array(
+      z.object({
+        role: z.enum(['user', 'assistant']),
+        content: z.string().trim().min(1),
+      }),
+    )
+    .optional()
+    .default([]),
+});
+
 export const ItemUpdateInSchema = z
   .object({
     category: CategorySchema,

@@ -2,14 +2,16 @@ import styles from './Switch.module.css';
 
 type Props = {
   checked: boolean;
+  variant?: 'primary' | 'secondary';
   onChange: (value: boolean) => void;
   label: string;
+
 };
 
-export function Switch({ checked, onChange, label }: Props) {
+export function Switch({ checked, onChange, label, variant='secondary' }: Props) {
   return (
     <label className={styles.wrapper}>
-      <span className={styles.label}>{label}</span>
+      <span className={`${styles.label} ${(variant === 'primary') ? styles.labelStrong : ''}`}>{label}</span>
       <button
         className={`${styles.switch} ${checked ? styles.checked : ''}`}
         type="button"

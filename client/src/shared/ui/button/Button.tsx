@@ -3,7 +3,7 @@ import styles from './Button.module.css';
 
 type Props = PropsWithChildren<
   ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant?: 'primary' | 'secondary' | 'ghost' | 'warning';
+    variant?: 'primary' | 'secondary' | 'ghost' | 'warning' | 'pagination';
     loading?: boolean;
     fullWidth?: boolean;
   }

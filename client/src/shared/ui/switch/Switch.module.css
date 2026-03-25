@@ -10,6 +10,11 @@
   font-size: 14px;
 }
 
+.labelStrong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .switch {
   position: relative;
   width: 42px;
@@ -36,5 +41,5 @@
 }
 
 .checked .thumb {
-  transform: translateX(18px);
+  transform: translateX(15px);
 }

@@ -39,6 +39,7 @@ export function AdsFilters({
         <hr/>
         <section className={styles.group}>
             <Switch
+                variant='primary'
                 checked={needsRevisionOnly}
                 onChange={onNeedsRevisionChange}
                 label="Только требующие доработок"

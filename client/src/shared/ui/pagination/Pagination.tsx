@@ -15,9 +15,8 @@ export function Pagination({ page, totalPages, onChange }: Props) {
 
   return (
     <div className={styles.pagination}>
-      <Button variant="secondary" onClick={() => onChange(page - 1)} disabled={page <= 1}>
-        <ChevronLeft size={16} />
-        Назад
+      <Button variant="pagination" onClick={() => onChange(page - 1)} disabled={page <= 1}>
+        <ChevronLeft size={28} />
       </Button>
 
       <div className={styles.pages}>
@@ -36,9 +35,8 @@ export function Pagination({ page, totalPages, onChange }: Props) {
         })}
       </div>
 
-      <Button variant="secondary" onClick={() => onChange(page + 1)} disabled={page >= totalPages}>
-        Вперёд
-        <ChevronRight size={16} />
+      <Button variant="pagination" onClick={() => onChange(page + 1)} disabled={page >= totalPages}>
+        <ChevronRight size={28} />
       </Button>
     </div>
   );

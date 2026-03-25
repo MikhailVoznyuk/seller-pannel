@@ -1,0 +1,1 @@
+export const AI_ENABLED = import.meta.env.VITE_ENABLE_AI !== 'false';

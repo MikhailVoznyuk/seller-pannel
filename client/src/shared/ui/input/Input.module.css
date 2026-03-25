@@ -1,0 +1,61 @@
+.wrapper {
+  display: grid;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  transition: border-color 0.2s ease;
+}
+
+.field:focus-within {
+  border-color: var(--primary);
+}
+
+.warning {
+  border-color: rgba(250, 173, 20, 0.55);
+  background: color-mix(in srgb, var(--warning-soft) 38%, var(--surface));
+}
+
+.error {
+  border-color: var(--danger);
+}
+
+.input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 10px 12px;
+}
+
+.clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: var(--text-soft);
+}
+
+.message {
+  font-size: 12px;
+  color: var(--danger);
+}

@@ -22,29 +22,33 @@ export function AdsFilters({
 }: Props) {
   return (
     <aside className={styles.sidebar}>
-      <section className={styles.group}>
-        <h3 className={styles.title}>Фильтры</h3>
-        <div className={styles.items}>
-          {categoryOptions.map((option) => (
-            <Checkbox
-              key={option.value}
-              label={option.label}
-              checked={categories.includes(option.value as AdCategory)}
-              onChange={() => onCategoryToggle(option.value as AdCategory)}
+    <div className={styles.content}>
+        <section className={styles.group}>
+            <h3 className={styles.title}>Фильтры</h3>
+            <div className={styles.items}>
+                {categoryOptions.map((option) => (
+                    <Checkbox
+                        key={option.value}
+                        label={option.label}
+                        checked={categories.includes(option.value as AdCategory)}
+                        onChange={() => onCategoryToggle(option.value as AdCategory)}
+                    />
+                ))}
+            </div>
+        </section>
+        <hr/>
+        <section className={styles.group}>
+            <Switch
+                checked={needsRevisionOnly}
+                onChange={onNeedsRevisionChange}
+                label="Только требующие доработок"
             />
-          ))}
-        </div>
-      </section>
+        </section>
+    </div>
 
-      <section className={styles.group}>
-        <Switch
-          checked={needsRevisionOnly}
-          onChange={onNeedsRevisionChange}
-          label="Только требующие доработок"
-        />
-      </section>
 
-      <Button variant="ghost" onClick={onReset}>
+
+      <Button variant="secondary" onClick={onReset}>
         Сбросить фильтры
       </Button>
     </aside>

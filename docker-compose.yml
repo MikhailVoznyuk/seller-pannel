@@ -9,29 +9,32 @@ services:
     volumes:
       - ollama_data:/root/.ollama
     healthcheck:
-      test: ["CMD", "ollama", "list"]
+      test:
+        - CMD-SHELL
+        - ollama list >/dev/null 2>&1 || exit 1
       interval: 10s
       timeout: 5s
       retries: 30
-      start_period: 10s
+      start_period: 20s
 
   ollama-pull:
-    image: curlimages/curl:8.12.1
+    image: curlimages/curl:8.10.1
     container_name: avito-ai-ollama-pull
     depends_on:
       ollama:
         condition: service_healthy
     entrypoint:
       - sh
-      - -ec
-      - |
-        echo "Waiting for Ollama API..."
-        until curl -fsS http://ollama:11434/api/tags >/dev/null; do
-          sleep 2
-        done
-        echo "Pulling model ${OLLAMA_MODEL:-qwen2.5:3b}..."
-        curl -fsS http://ollama:11434/api/pull -d '{"model":"'"${OLLAMA_MODEL:-qwen2.5:3b}"'","stream":false}' >/tmp/pull-result.json
-        cat /tmp/pull-result.json
+      - -c
+      - >
+        set -eu;
+        echo "Waiting for Ollama API...";
+        until curl -sf http://ollama:11434/api/tags >/dev/null; do
+          sleep 2;
+        done;
+        echo "Pulling model ${OLLAMA_MODEL:-qwen2.5:3b}...";
+        curl -sf -H "Content-Type: application/json" http://ollama:11434/api/pull -d "{\"model\":\"${OLLAMA_MODEL:-qwen2.5:3b}\",\"stream\":false}" >/dev/null;
+        echo "Model is ready.";
     restart: "no"
 
   server:
@@ -46,15 +49,25 @@ services:
     ports:
       - "8080:8080"
     environment:
+      HOST: 0.0.0.0
       PORT: 8080
       AI_PROVIDER: ${AI_PROVIDER:-ollama}
-      OLLAMA_URL: ${OLLAMA_URL:-http://ollama:11434/api/generate}
-      OLLAMA_CHAT_URL: ${OLLAMA_CHAT_URL:-http://ollama:11434/api/chat}
+      OLLAMA_URL: http://ollama:11434/api/generate
+      OLLAMA_CHAT_URL: http://ollama:11434/api/chat
       OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
       OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-15m}
       OLLAMA_TEMPERATURE: ${OLLAMA_TEMPERATURE:-0.3}
     volumes:
       - ./server/data:/app/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - |
+          node -e "fetch('http://127.0.0.1:8080/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
 
   client:
     build:
@@ -62,7 +75,7 @@ services:
     container_name: avito-ai-client
     depends_on:
       server:
-        condition: service_started
+        condition: service_healthy
     ports:
       - "5173:5173"
     environment:

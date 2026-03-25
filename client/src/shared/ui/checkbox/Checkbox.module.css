@@ -1,0 +1,17 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+}
+
+.label {
+  font-size: 14px;
+}

@@ -1,7 +1,11 @@
 .wrapper {
   display: grid;
   gap: 6px;
-  max-width: 456px;
+
+}
+
+.fullWidth {
+  max-width: 100%;
 }
 
 .labelStrong {
@@ -46,6 +50,7 @@
   background: transparent;
   color: var(--text);
   padding: 10px 12px;
+  max-width: 456px;
 }
 
 .clear {

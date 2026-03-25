@@ -1,14 +1,25 @@
 .wrapper {
   display: grid;
   gap: 6px;
+  max-width: 456px;
+}
+
+.fullWidth {
+  max-width: 100%;
+}
+
+.labelStrong {
+  font-size: 16px;
+  font-weight: bolder;
 }
 
 .label {
-  font-size: 13px;
-  color: var(--text-soft);
+  font-size: 14px;
+  color: var(--text);
 }
 
 .field {
+
   display: flex;
   align-items: center;
   gap: 8px;

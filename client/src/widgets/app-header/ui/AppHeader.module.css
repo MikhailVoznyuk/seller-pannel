@@ -1,0 +1,42 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 16px 24px 0;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 12px 0;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.text {
+  margin-left: 2px;
+  text-transform: lowercase;
+}
+
+.dotBlue,
+.dotGreen,
+.dotYellow,
+.dotRed {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dotBlue { background: #1677ff; }
+.dotGreen { background: #52c41a; }
+.dotYellow { background: #faad14; }
+.dotRed { background: #ff4d4f; }

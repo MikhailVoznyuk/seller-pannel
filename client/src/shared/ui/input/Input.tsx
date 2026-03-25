@@ -5,16 +5,14 @@ import styles from './Input.module.css';
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   variant?: "primary" | "secondary";
   label?: string;
-  fullWidth?: boolean;
   error?: string;
   warning?: boolean;
   onClear?: () => void;
-
 };
 
-export function Input({ label, error, warning, onClear, className = '', variant='secondary', fullWidth=false,  ...props }: Props) {
+export function Input({ label, error, warning, onClear, className = '', variant='secondary', ...props }: Props) {
   return (
-    <label className={`${styles.wrapper} ${fullWidth ? styles.fullWidth : ''}`}>
+    <label className={styles.wrapper}>
       {label ? <span className={variant==='primary' ? styles.labelStrong : styles.label}>{label}</span> : null}
       <span className={`${styles.field}  ${warning ? styles.warning : ''} ${error ? styles.error : ''}`}>
         <input className={`${styles.input} ${className}`} {...props} />

@@ -1,0 +1,35 @@
+.toolbar {
+  width: 100%;
+  display: grid;
+  gap: 18px;
+}
+
+
+.controls {
+
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) auto 220px;
+  gap: 12px;
+}
+
+.searchWrap {
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  color: var(--text-soft);
+  z-index: 1;
+}
+
+.searchInput {
+  padding-left: 34px;
+}
+
+@media (max-width: 1024px) {
+  .controls {
+    grid-template-columns: 1fr;
+  }
+}

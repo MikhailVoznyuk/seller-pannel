@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { formatPrice } from '@/shared/lib/format-price';
-import { formatDate } from '@/shared/lib/format-date';
 import { getCategoryLabel } from '@/entities/ad/lib/ad-format';
 import { resolveNeedsRevision } from '@/entities/ad/lib/ad-revision';
 import type { AdLayout, AdListItem } from '@/entities/ad/model/types';
@@ -19,16 +18,22 @@ export function AdCard({ item, layout }: Props) {
       <div className={styles.image}>
         <img alt="" src={item.imageUrl || '/placeholder.svg'} />
       </div>
+      <div className={styles.metaRow}>
+        <span className={styles.category}>{getCategoryLabel(item.category)}</span>
+      </div>
 
       <div className={styles.content}>
-        <div className={styles.metaRow}>
-          <span className={styles.category}>{getCategoryLabel(item.category)}</span>
-          {needsRevision ? <span className={styles.badge}>Требует доработок</span> : null}
-        </div>
+
 
         <h3 className={styles.title}>{item.title}</h3>
         <p className={styles.price}>{formatPrice(item.price)}</p>
-        <p className={styles.date}>Опубликовано: {formatDate(item.createdAt)}</p>
+        {needsRevision ? (
+          <div className={styles.badge}>
+            <span className={styles.circle} />
+            <span>Требует доработок</span>
+          </div>
+
+        )  : null}
       </div>
     </Link>
   );

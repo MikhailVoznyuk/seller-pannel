@@ -48,6 +48,13 @@
   color: #a86400;
 }
 
+.pagination {
+  width: 38px;
+  height: 38px;
+  background: var(--surface);
+  border-color: var(--border);
+  padding: 4px
+}
 .fullWidth {
   width: 100%;
 }

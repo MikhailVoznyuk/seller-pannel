@@ -33,7 +33,6 @@ export function AdsToolbar({
         <div className={styles.searchWrap}>
           <Search className={styles.searchIcon} size={16} />
           <Input
-            fullWidth
             aria-label="Поиск по объявлениям"
             placeholder="Поиск по названию"
             value={searchValue}

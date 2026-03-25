@@ -85,7 +85,7 @@ export function AdsListPage() {
           <section className={styles.content}>
 
               {adsQuery.isLoading ? (
-                  <StatusCard title="Загрузка объявлений">Тянем данные с сервера.</StatusCard>
+                  <StatusCard title="Загрузка объявлений"></StatusCard>
               ) : null}
 
               {adsQuery.isError ? (

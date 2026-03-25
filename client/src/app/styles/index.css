@@ -100,3 +100,11 @@ img {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+hr {
+  height: 1px;
+  width: 100%;
+  border-radius: 1px;
+  border: none;
+  background-color: var(--text-soft);
+  opacity: 0.5;
+}

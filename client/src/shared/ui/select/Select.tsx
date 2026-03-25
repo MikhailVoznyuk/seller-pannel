@@ -7,16 +7,17 @@ type Option = {
 };
 
 type Props = SelectHTMLAttributes<HTMLSelectElement> & {
+  variant?: "primary" | "secondary";
   label?: string;
   options: Option[];
   error?: string;
   warning?: boolean;
 };
 
-export function Select({ label, options, error, warning, className = '', ...props }: Props) {
+export function Select({ label, options, error, warning, className = '', variant='secondary', ...props }: Props) {
   return (
     <label className={styles.wrapper}>
-      {label ? <span className={styles.label}>{label}</span> : null}
+      {label ? <span className={variant==='primary' ? styles.labelStrong : styles.label}>{label}</span> : null}
       <select
         className={`${styles.select} ${warning ? styles.warning : ''} ${error ? styles.error : ''} ${className}`}
         {...props}

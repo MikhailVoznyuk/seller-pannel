@@ -1,0 +1,73 @@
+version: "3.9"
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: avito-ai-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  ollama-pull:
+    image: curlimages/curl:8.12.1
+    container_name: avito-ai-ollama-pull
+    depends_on:
+      ollama:
+        condition: service_healthy
+    entrypoint:
+      - sh
+      - -ec
+      - |
+        echo "Waiting for Ollama API..."
+        until curl -fsS http://ollama:11434/api/tags >/dev/null; do
+          sleep 2
+        done
+        echo "Pulling model ${OLLAMA_MODEL:-qwen2.5:3b}..."
+        curl -fsS http://ollama:11434/api/pull -d '{"model":"'"${OLLAMA_MODEL:-qwen2.5:3b}"'","stream":false}' >/tmp/pull-result.json
+        cat /tmp/pull-result.json
+    restart: "no"
+
+  server:
+    build:
+      context: ./server
+    container_name: avito-ai-server
+    depends_on:
+      ollama:
+        condition: service_healthy
+      ollama-pull:
+        condition: service_completed_successfully
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      AI_PROVIDER: ${AI_PROVIDER:-ollama}
+      OLLAMA_URL: ${OLLAMA_URL:-http://ollama:11434/api/generate}
+      OLLAMA_CHAT_URL: ${OLLAMA_CHAT_URL:-http://ollama:11434/api/chat}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-15m}
+      OLLAMA_TEMPERATURE: ${OLLAMA_TEMPERATURE:-0.3}
+    volumes:
+      - ./server/data:/app/data
+
+  client:
+    build:
+      context: ./client
+    container_name: avito-ai-client
+    depends_on:
+      server:
+        condition: service_started
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_PROXY_TARGET: http://server:8080
+      VITE_ENABLE_AI: "true"
+
+volumes:
+  ollama_data:

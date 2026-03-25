@@ -31,7 +31,7 @@
 }
 
 .secondary {
-  background: var(--surface-muted);
+  background: var(--surface);
   border-color: var(--border);
   color: var(--text);
 }

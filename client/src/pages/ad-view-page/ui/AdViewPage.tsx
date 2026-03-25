@@ -32,7 +32,7 @@ export function AdViewPage() {
     <PageShell header={<AppHeader />}>
       <div style={{ marginTop: 20 }}>
         {adQuery.isLoading ? (
-          <StatusCard title="Загрузка объявления">Подтягиваю карточку.</StatusCard>
+          <StatusCard tone="info" title="Загрузка объявления"></StatusCard>
         ) : null}
 
         {adQuery.isError ? (
